@@ -573,6 +573,9 @@ class EncounterStatus(models.Model):
     name = models.CharField(max_length=100, primary_key=True)
     is_active = models.BooleanField(default=False)
 
+    class Meta:
+        verbose_name_plural = "Encounter status"
+
     def __str__(self):
         return self.name
 

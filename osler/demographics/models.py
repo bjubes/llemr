@@ -59,6 +59,8 @@ class TransportationOption(models.Model):
 
 
 class Demographics(models.Model):
+    class Meta:
+        verbose_name_plural = "Demographics"
 
     patient = models.OneToOneField(
         Patient, on_delete=models.CASCADE, null=True)
