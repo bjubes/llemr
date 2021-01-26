@@ -38,6 +38,10 @@ services:
 
   selenium:
     image: selenium/standalone-chrome
+    # logging:
+    #   driver: "none"
+    # environment:
+    #   - SE_OPTS="log log.txt"
     ports:
       - 4444:4444 # Selenium
       - 5900:5900 # VNC server
