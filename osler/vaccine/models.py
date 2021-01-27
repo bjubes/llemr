@@ -22,12 +22,12 @@ class VaccineSeriesType(models.Model):
 
     def next_dose(self, dose):
         '''Takes VaccineDoseType and returns next in this VaccineSeriesType or None if last'''
-        if dose==self.last_dose():
+        if dose == self.last_dose():
             return None
         else:
             # TODO find more elegant way to do this
             for index, item in enumerate(self.doses()):
-                if dose==item:
+                if dose == item:
                     return self.doses()[index+1]
 
     def __str__(self):
@@ -39,9 +39,9 @@ class VaccineDoseType(models.Model):
     with minimum required time intervals'''
 
     kind = models.ForeignKey(VaccineSeriesType,
-        on_delete=models.CASCADE)
-    time_from_first = models.DurationField(default=0, 
-        help_text='Example: 60 days for 2 months, input minimum required interval')
+                             on_delete=models.CASCADE)
+    time_from_first = models.DurationField(default=0,
+                                           help_text='Example: 60 days for 2 months, input minimum required interval')
 
     def __str__(self):
         '''Provides string to display on front end for vaccine doses'''
@@ -55,8 +55,11 @@ class VaccineDoseType(models.Model):
 class VaccineSeries(Note):
     '''Record of ordering a patient's vaccine series in clinic'''
 
+    class Meta:
+        verbose_name_plural = "Vaccine series"
+
     kind = models.ForeignKey(VaccineSeriesType, on_delete=models.PROTECT,
-        help_text='What kind of vaccine are you administering?')
+                             help_text='What kind of vaccine are you administering?')
 
     def doses(self):
         '''Return queryset of all VaccineDose for this VaccineSeries'''
@@ -76,23 +79,23 @@ class VaccineDose(Note):
     '''Record of administering a patient's particular vaccine dose at clinic.'''
 
     series = models.ForeignKey(VaccineSeries, on_delete=models.CASCADE,
-        help_text='Which vaccine is this?')
+                               help_text='Which vaccine is this?')
     which_dose = models.ForeignKey(VaccineDoseType, on_delete=models.PROTECT)
     encounter = models.ForeignKey(Encounter, on_delete=models.CASCADE)
 
     def is_last(self):
         '''Return True if this dose is last dose in the series'''
-        return self.which_dose==self.series.kind.last_dose()
+        return self.which_dose == self.series.kind.last_dose()
 
     def next_due_date(self):
         '''Return DateTime object of next dose due date or None is last dose'''
         if self.is_last():
             return None
         else:
-            #Please change if you have a more elegant way of doing
-            first = self.series.first_dose() #First VaccineDose in this series
-            next = self.series.kind.next_dose(self.which_dose) #Next VaccineDoseType
-            next_due=first.written_datetime+next.time_from_first
+            # Please change if you have a more elegant way of doing
+            first = self.series.first_dose()  # First VaccineDose in this series
+            next = self.series.kind.next_dose(self.which_dose)  # Next VaccineDoseType
+            next_due = first.written_datetime+next.time_from_first
             return next_due
 
     def __str__(self):
@@ -103,7 +106,7 @@ class VaccineActionItem(AbstractActionItem):
     '''An action item pertaining to vaccine administration (ie calling pt)'''
 
     vaccine = models.ForeignKey(VaccineSeries, on_delete=models.CASCADE,
-        help_text='Which vaccine is this for?')
+                                help_text='Which vaccine is this for?')
 
     MARK_DONE_URL_NAME = 'new-vaccine-followup'
 
@@ -121,8 +124,8 @@ class VaccineActionItem(AbstractActionItem):
     def __str__(self):
         formatted_date = self.due_date.strftime("%D")
         return 'Call %s on %s for next dose of %s vaccine' % (self.patient,
-                                                    formatted_date,
-                                                    self.vaccine)
+                                                              formatted_date,
+                                                              self.vaccine)
 
 
 class VaccineFollowup(Followup):
@@ -151,4 +154,3 @@ class VaccineFollowup(Followup):
             out.append("Patient does not return for another dose.")
 
         return " ".join(out)
-    
