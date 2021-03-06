@@ -279,3 +279,7 @@ osler/media/
 !.envs/.production/
 
 .vscode/*
+
+
+# babel compiled output
+osler/static/js/*.bundle.js

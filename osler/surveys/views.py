@@ -70,6 +70,15 @@ def view(request, id):
     return render(request, 'surveys/fill.html', ctx)
 
 
+def edit(request, id):
+    survey = Survey.objects.get(id=id)
+    ctx = {'survey': survey,
+           'QuestionType': Question.QuestionType,
+           }
+
+    return render(request, 'surveys/edit.html', ctx)
+
+
 def submit(request, id):
     '''recieves data from a survey fill and creates a response object'''
     if request.method != "POST":
