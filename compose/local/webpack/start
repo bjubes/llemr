@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+npm config set update-notifier false
+export npm_config_loglevel=warn
+
+npm install --dev --quiet > /dev/null
+npm run --quiet watch
+

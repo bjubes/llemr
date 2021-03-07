@@ -12,6 +12,7 @@ module.exports = {
     library: "[name]",
     libraryTarget: "var", // export bar() in index.js and access as [name].bar() in template
   },
+  stats: "errors-warnings",
   devServer: {
     writeToDisk: true, // Write files to disk in dev mode, so Django can serve the assets
   },
