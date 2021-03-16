@@ -2,7 +2,14 @@ const path = require("path");
 
 module.exports = {
   entry: {
-    surveys_edit: "./osler/assets/surveys/edit/index.js",
+    surveys_edit: {
+      import: "./osler/assets/surveys/edit/index.js",
+      dependOn: "shared",
+    },
+    surveys_test: {
+      import: "./osler/assets/surveys/edit/test.js",
+    },
+    shared: ["react", "react-dom"],
   },
   output: {
     filename: "[name].bundle.js", // output bundle file name
@@ -11,6 +18,9 @@ module.exports = {
     publicPath: "osler/static/",
     library: "[name]",
     libraryTarget: "var", // export bar() in index.js and access as [name].bar() in template
+  },
+  optimization: {
+    runtimeChunk: "single",
   },
   devServer: {
     writeToDisk: true, // Write files to disk in dev mode, so Django can serve the assets
